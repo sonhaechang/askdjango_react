@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import Post from 'Post';
+import Post from 'components/Post';
 
 function PostList() {
     const apiUrl = 'http://127.0.0.1:8000/api/posts';
