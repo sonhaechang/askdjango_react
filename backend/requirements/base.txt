@@ -1,0 +1,8 @@
+asgiref==3.6.0
+django==4.1.7
+django_debug_toolbar==3.8.1
+django-environ==0.10.0
+django-extensions==3.2.1
+djangorestframework==3.14.0
+pytz==2023.2
+sqlparse==0.4.3
