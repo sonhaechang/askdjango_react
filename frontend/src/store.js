@@ -11,16 +11,16 @@ const reducer = (prevState, action) => {
   
     if (type === SET_TOKEN) {
         const { payload: accessToken } = action;
-        const newState = { ...prevState, accessToken };
+        const newState = { ...prevState, accessToken, isAuthenticated: true };
 
         return UpdateWithSideEffect(newState, (state, dispatch) => {
-            setStorageItem("accessToken", accessToken);
+            setStorageItem('accessToken', accessToken);
         });
     } else if (type === DELETE_TOKEN) {
-        const newState = { ...prevState, accessToken: '' };
+        const newState = { ...prevState, accessToken: '', isAuthenticated: true };
 
         return UpdateWithSideEffect(newState, (state, dispatch) => {
-            setStorageItem("accessToken", '');
+            setStorageItem('accessToken', '');
         });
     }
   
@@ -28,8 +28,10 @@ const reducer = (prevState, action) => {
   };
 
 export const AppProvider = ({ children }) => {
+    const accessToken = getStorageItem('accessToken', '');
     const [store, dispatch] = useReducerWithSideEffects(reducer, {
-        accessToken: getStorageItem('accessToken', '')
+        accessToken,
+        isAuthenticated: accessToken.length > 0
     });
 
     return (

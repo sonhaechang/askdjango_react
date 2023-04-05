@@ -1,44 +1,66 @@
 import AppLayout from 'components/AppLayout';
-import { Routes, Route } from 'react-router-dom';
-import React from 'react';
+import { 
+    Routes, 
+    Route, 
+    Navigate, 
+    useLocation 
+} from 'react-router-dom';
 import Home from './Home';
 import About from './About';
 import Login from './accounts/Login';
 import Profile from './accounts/Profile';
 import Signup from './accounts/Signup';
+import { useAppContext } from "store";
 
 
 function Root() {
+    const location = useLocation();
+
+    const {
+        store: { isAuthenticated }
+    } = useAppContext();
+
     return (
         <AppLayout>
             <Routes>
                 <Route 
-                    exact 
-                    path='/' 
-                    element={<Home />} 
+                    path="/*" 
+                    element={
+                        isAuthenticated ? 
+                        <Home /> : 
+                        <Navigate 
+                            replace 
+                            to='/accounts/login' 
+                            state={{ from: location }} 
+                        />
+                    } 
                 />
 
                 <Route 
-                    exact 
-                    path='/about' 
+                    path='/about/*' 
                     element={<About />} 
                 />
 
                 <Route 
-                    exact 
-                    path='/accounts/profile'
-                    element={<Profile />}
+                    path='/accounts/profile/*'
+                    element={
+                        isAuthenticated ? 
+                        <Profile /> :
+                        <Navigate 
+                            replace 
+                            to='/accounts/login' 
+                            state={{ from: location }} 
+                        />
+                    }
                 />
 
                 <Route 
-                    exact 
-                    path='/accounts/login'
+                    path='/accounts/login/*'
                     element={<Login />}
                 />
 
                 <Route 
-                    exact 
-                    path='/accounts/signup'
+                    path='/accounts/signup/*'
                     element={<Signup />}
                 />
             </Routes>

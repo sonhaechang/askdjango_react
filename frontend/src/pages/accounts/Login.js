@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Axios from "axios";
 import { useAppContext } from "store";
 import { setToken } from "store";
 
 function Login() {
+    const location = useLocation();
     const navigate = useNavigate();
     const { dispatch } = useAppContext();
     const [fieldErrors, setFieldErrors] = useState({});
+
+    const { from: loginRedirectUrl } = location.state || {
+        from: { pathname: '/' }
+    };
+
+    console.log(loginRedirectUrl);
 
     const layout = {
         labelCol: { span: 8 },
@@ -28,7 +35,7 @@ function Login() {
             const data = { username, password };
             try {
                     const response = await Axios.post(
-                        "http://localhost:8000/accounts/token/",
+                        'http://127.0.0.1:8000/accounts/token/',
                         data
                     );
                     
@@ -42,17 +49,16 @@ function Login() {
                     dispatch(setToken(accessToken));
             
                     notification.open({
-                        message: "로그인 성공",
-                        icon: <SmileOutlined style={{ color: "#108ee9" }} />
+                        message: '로그인 성공',
+                        icon: <SmileOutlined style={{ color: '#108ee9' }} />
                     });
-        
-                navigate('/');  // TODO: 이동 주소
+                navigate(loginRedirectUrl);
                 } catch (error) {
                     if (error.response) {
                         notification.open({
-                            message: "로그인 실패",
-                            description: "아이디/암호를 확인해주세요.",
-                            icon: <FrownOutlined style={{ color: "#ff3333" }} />
+                            message: '로그인 실패',
+                            description: '아이디/암호를 확인해주세요.',
+                            icon: <FrownOutlined style={{ color: '#ff3333' }} />
                         });
         
                         const { data: fieldsErrorMessages } = error.response;
@@ -63,8 +69,8 @@ function Login() {
                                 (acc, [fieldName, errors]) => {
                                     // errors : ["m1", "m2"].join(" ") => "m1 "m2"
                                     acc[fieldName] = {
-                                        validateStatus: "error",
-                                        help: errors.join(" ")
+                                        validateStatus: 'error',
+                                        help: errors.join(' ')
                                     };
                                     return acc;
                                 },
