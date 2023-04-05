@@ -10,7 +10,6 @@ import Profile from './accounts/Profile';
 function Root() {
     return (
         <AppLayout>
-            최상위 컴포넌트
             <Routes>
                 <Route 
                     exact 
@@ -29,7 +28,7 @@ function Root() {
                     path='/accounts/profile'
                     element={<Profile />}
                 />
-                
+
                 <Route exact 
                     path='/accounts/login'
                     element={<Login />}
