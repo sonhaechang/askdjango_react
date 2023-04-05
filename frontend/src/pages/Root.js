@@ -5,6 +5,7 @@ import Home from './Home';
 import About from './About';
 import Login from './accounts/Login';
 import Profile from './accounts/Profile';
+import Signup from './accounts/Signup';
 
 
 function Root() {
@@ -29,9 +30,16 @@ function Root() {
                     element={<Profile />}
                 />
 
-                <Route exact 
+                <Route 
+                    exact 
                     path='/accounts/login'
                     element={<Login />}
+                />
+
+                <Route 
+                    exact 
+                    path='/accounts/signup'
+                    element={<Signup />}
                 />
             </Routes>
         </AppLayout>
