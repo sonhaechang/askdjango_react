@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "antd";
-import "./SuggestionList.scss";
-import Suggestion from "./Suggestion";
+import Axios from "axios";
 import useAxios from "axios-hooks"
 import { useAppContext } from 'store';
+import Suggestion from "./Suggestion";
+import "./SuggestionList.scss";
 
 function SuggestionList({ style }) {
     const { store: { accessToken } } = useAppContext();
-    const apiUrl = 'http://localhost:8000/accounts/suggestions/';
+    const apiUrl = 'http://127.0.0.1:8000/accounts/suggestions/';
     const headers = { Authorization: `Bearer ${accessToken}` };
     const [userList, setUserList] = useState([]);
     // const [{ data: userList, loading, error }, refetch] = useAxios({
@@ -16,11 +17,20 @@ function SuggestionList({ style }) {
     });
 
     const onFollowUser = username => {
-        setUserList(prevUserList =>
-            prevUserList.map(user =>
-                user.username !== username ? user : { ...user, is_follow: true }
-            )
-        );
+        const data = { username };
+        const config = { headers };
+
+        Axios.post('http://127.0.0.1:8000/accounts/follow/', data, config)
+        .then(response => {
+            setUserList(prevUserList =>
+                prevUserList.map(user =>
+                    user.username !== username ? user : { ...user, is_follow: true }
+                )
+            );
+        })
+        .catch(error => {
+            console.error(error);
+        });
     };
 
     useEffect(() => {
