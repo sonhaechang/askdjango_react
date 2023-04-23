@@ -2,31 +2,38 @@ import React from "react";
 import { Avatar, Button } from "antd";
 import "./Suggestion.scss";
 
-function Suggestion({ suggestionUser }) {
-    const { username, name, avatar_url } = suggestionUser;
+function Suggestion({ suggestionUser, onFollowUser }) {
+    const { username, name, avatar_url, is_follow } = suggestionUser;
 
     return (
-        <div className="suggestion">
-            <div className="avatar">
+        <div className='suggestion'>
+            <div className='avatar'>
                 <Avatar
-                    size="small"
+                    size='small'
                     icon={
                         <img
-                            src={"http://localhost:8000" + avatar_url}
+                            src={'http://localhost:8000' + avatar_url}
                             alt={`${username}'s avatar`}
                         />
                     }
                 />
             </div>
             
-            <div className="username">
+            <div className='username'>
                 {name.length === 0 ? username : name}
             </div>
 
             <div className="action">
-                <Button size="small">
-                    Follow
-                </Button>
+                {
+                    is_follow ? 
+                    '팔로잉 중' : 
+                    <Button 
+                        size='small'
+                        onClick={() => onFollowUser(username)}
+                    >
+                        Follow
+                    </Button>
+                }
             </div>
         </div>
     );
