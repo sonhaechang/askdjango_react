@@ -3,13 +3,14 @@ import { Avatar, Card } from "antd";
 import { HeartFilled, UserOutlined } from "@ant-design/icons";
 
 function Post({ post }) {
-    const { caption, location, photo} = post;
+    const { author, caption, location, photo, tag_set, like_user_set } = post;
+    const { username, name, avatar_url } = author;
 
     return (
         <div className="post">
             <Card
                 hoverable
-                cover={ 
+                cover={                     
                     <img src={photo} alt={caption} /> 
                 }
                 actions={[<HeartFilled />]}
@@ -18,7 +19,12 @@ function Post({ post }) {
                     avatar={ 
                         <Avatar 
                             size="large" 
-                            icon={<UserOutlined />} 
+                            icon={
+                                <img 
+                                    src={`http://127.0.0.1:8000` + avatar_url} 
+                                    alt={username} 
+                                />
+                            } 
                         /> 
                     }
                     title={location}
