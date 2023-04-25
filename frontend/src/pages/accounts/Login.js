@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Card, Form, Input, Button, notification } from "antd";
-import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import Axios from "axios";
+import { Card, Form, Input, Button, notification } from "antd";
+import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useAppContext } from "store";
 import { setToken } from "store";
+import { parseErrorMessages } from 'utils/forms';
 
 function Login() {
     const location = useLocation();
@@ -15,8 +16,6 @@ function Login() {
     const { from: loginRedirectUrl } = location.state || {
         from: { pathname: '/' }
     };
-
-    console.log(loginRedirectUrl);
 
     const layout = {
         labelCol: { span: 8 },
@@ -64,19 +63,8 @@ function Login() {
                         const { data: fieldsErrorMessages } = error.response;
                         // fieldsErrorMessages => { username: "m1 m2", password: [] }
                         // python: mydict.items()
-                        setFieldErrors(
-                            Object.entries(fieldsErrorMessages).reduce(
-                                (acc, [fieldName, errors]) => {
-                                    // errors : ["m1", "m2"].join(" ") => "m1 "m2"
-                                    acc[fieldName] = {
-                                        validateStatus: 'error',
-                                        help: errors.join(' ')
-                                    };
-                                    return acc;
-                                },
-                                {}
-                            )
-                        );
+
+                        setFieldErrors(parseErrorMessages(fieldsErrorMessages));
                     }
                 }
             }

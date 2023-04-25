@@ -6,7 +6,7 @@ import Post from 'components/Post';
 
 function PostList() {
     const { store: { accessToken } } = useAppContext();
-    const headers = { Authorization: `Bearer ${accessToken}` }
+    const headers = { Authorization: `Bearer ${accessToken}` };
     const apiUrl = 'http://127.0.0.1:8000/api/posts/';
     const [{ data: postList, loading, error }] = useAxios({
         url: apiUrl, headers

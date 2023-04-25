@@ -1,4 +1,3 @@
-import AppLayout from 'components/AppLayout';
 import { 
     Routes, 
     Route, 
@@ -7,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Home from './Home';
 import About from './About';
+import PostNew from './PostNew';
 import Login from './accounts/Login';
 import Profile from './accounts/Profile';
 import Signup from './accounts/Signup';
@@ -21,7 +21,7 @@ function Root() {
     } = useAppContext();
 
     return (
-        <AppLayout>
+        <>
             <Routes>
                 <Route 
                     path="/*" 
@@ -39,6 +39,11 @@ function Root() {
                 <Route 
                     path='/about/*' 
                     element={<About />} 
+                />
+
+                <Route 
+                    path='posts/new/*'
+                    element={<PostNew />} 
                 />
 
                 <Route 
@@ -64,7 +69,7 @@ function Root() {
                     element={<Signup />}
                 />
             </Routes>
-        </AppLayout>
+        </>
     );
 };
 
