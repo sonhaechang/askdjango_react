@@ -1,16 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert } from "antd";
 import useAxios from 'axios-hooks';
 import { useAppContext } from 'store';
 import Post from 'components/Post';
+import Axios from 'axios';
 
 function PostList() {
     const { store: { accessToken } } = useAppContext();
     const headers = { Authorization: `Bearer ${accessToken}` };
     const apiUrl = 'http://127.0.0.1:8000/api/posts/';
-    const [{ data: postList, loading, error }] = useAxios({
+    const [postList, setPostList] = useState([])
+    const [{ data: originPostList, loading, error }] = useAxios({
         url: apiUrl, headers
     });
+
+    const handleLike = async ({ post, isLike }) => {
+        const apiUrl = `http://127.0.0.1:8000/api/posts/${post.id}/like/`;
+        const method = isLike ? 'POST': 'DELETE';
+
+        try {
+            await Axios({
+                url: apiUrl,
+                method,
+                headers,
+            });
+
+            setPostList(prevList => {
+                return prevList.map(currentPost =>
+                    currentPost === post ?
+                    { ...currentPost, is_like: isLike } :
+                    currentPost
+                );
+            });
+
+        } catch(error) {
+            console.log('error :', error);
+        }    
+    };
+
+    useEffect(() => {
+        setPostList(originPostList);
+    }, [originPostList]);
 
     return (
         <div>
@@ -22,7 +52,11 @@ function PostList() {
             )}
 
             {postList && postList.map(post =>
-                <Post post={post} key={post.id} />
+                <Post 
+                    post={post} 
+                    key={post.id} 
+                    handleLike={handleLike}
+                />
             )}
         </div>
     )

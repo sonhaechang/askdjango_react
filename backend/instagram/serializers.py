@@ -10,7 +10,23 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
-    class Meta:
-        model = Post
-        fields = '__all__'
+	author = AuthorSerializer(read_only=True)
+	is_like = serializers.SerializerMethodField('is_like_field')
+	class Meta:
+		model = Post
+		fields = [
+			'id', 
+			'author', 
+			'caption', 
+			'location', 
+			'photo', 
+			'tag_set', 
+			'created_at', 
+			'is_like'
+		]
+
+	def is_like_field(self ,obj):
+		if 'request' in self.context:
+			user = self.context['request'].user
+			return obj.like_user_set.filter(pk=user.pk).exists()
+		return False
