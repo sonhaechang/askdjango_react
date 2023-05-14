@@ -28,6 +28,12 @@ class SuggestionListView(ListAPIView):
             .exclude(pk__in=self.request.user.following_set.all())
         )
         return qs
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
 
 @api_view(['POST'])
 def user_follow(request):

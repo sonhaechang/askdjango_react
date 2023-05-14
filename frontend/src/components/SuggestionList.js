@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "antd";
-import Axios from "axios";
-import useAxios from "axios-hooks"
+import { axiosInstance, useAxios } from 'api';
 import { useAppContext } from 'store';
 import Suggestion from "./Suggestion";
 import "./SuggestionList.scss";
 
 function SuggestionList({ style }) {
     const { store: { accessToken } } = useAppContext();
-    const apiUrl = 'http://127.0.0.1:8000/accounts/suggestions/';
+    const apiUrl = '/accounts/suggestions/';
     const headers = { Authorization: `Bearer ${accessToken}` };
     const [userList, setUserList] = useState([]);
     // const [{ data: userList, loading, error }, refetch] = useAxios({
@@ -20,7 +19,7 @@ function SuggestionList({ style }) {
         const data = { username };
         const config = { headers };
 
-        Axios.post('http://127.0.0.1:8000/accounts/follow/', data, config)
+        axiosInstance.post('/accounts/follow/', data, config)
         .then(response => {
             setUserList(prevUserList =>
                 prevUserList.map(user =>

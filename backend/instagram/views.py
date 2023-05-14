@@ -65,6 +65,11 @@ class CommentViewSet(ModelViewSet):
         qs = qs.filter(post__pk=self.kwargs['post_pk'])
         return qs
     
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
     def perform_create(self, serializer):
         post = get_object_or_404(Post, pk=self.kwargs['post_pk'])
         serializer.save(author=self.request.user, post=post)

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Axios from 'axios';
+// import Axios from 'axios';
+import { axiosInstance } from 'api';
 import { Form, Input, Button, Upload, Modal, notification } from 'antd';
 import { PlusOutlined, FrownOutlined } from '@ant-design/icons';
 import { useAppContext } from 'store';
@@ -47,7 +48,7 @@ function PostNewForm() {
         })
 
         try {
-            const response = await Axios.post('http://127.0.0.1:8000/api/posts/', formData, { headers });
+            const response = await axiosInstance.post('/api/posts/', formData, { headers });
             console.log('success response: ', response);
             navigate('/');
 

@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { Avatar, Tooltip, Input, Button } from 'antd';
 import moment from 'moment';
-import useAxios from 'axios-hooks';
-import Axios from 'axios';
+import { axiosInstance, useAxios } from 'api';
 import Comment from './Comment';
 import { useAppContext } from 'store';
-import axios from 'axios';
 
 function CommentList({ post }) {
     const { store: { accessToken } } = useAppContext();
 
     const headers = { Authorization: `Bearer ${accessToken}` };
-    const apiUrl = `http://127.0.0.1:8000/api/posts/${post.id}/comments/`;
+    const apiUrl = `/api/posts/${post.id}/comments/`;
 
     const [{ data: commentList, loading, error }, refetch] = useAxios({
         url: apiUrl, 
@@ -22,7 +20,7 @@ function CommentList({ post }) {
 
     const handleCommentSave = async () => {
         try {
-            const response = await Axios.post(
+            const response = await axiosInstance.post(
                 apiUrl, 
                 { message: commentContent },
                 { headers }
@@ -39,6 +37,9 @@ function CommentList({ post }) {
 
     return (
         <div>
+            {loading && <div>Loading...</div>}
+            {error && <div>로딩중 에러가 발생했습니다.</div>}
+            
             {commentList && commentList.map(comment => 
                 <Comment 
                     key={comment.id}
@@ -46,7 +47,7 @@ function CommentList({ post }) {
                     avatar={
                         <Avatar 
                             // FIXME: avatar_url에 host 지정
-                            src={'http://127.0.0.1:8000' + comment.author.avatar_url} 
+                            src={comment.author.avatar_url} 
                             alt={comment.author.name ? comment.author.name : comment.author.username} 
                         />
                     }

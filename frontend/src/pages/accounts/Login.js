@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Axios from "axios";
+import { axiosInstance } from 'api';
 import { Card, Form, Input, Button, notification } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useAppContext } from "store";
@@ -33,8 +33,8 @@ function Login() {
             const { username, password } = values;
             const data = { username, password };
             try {
-                    const response = await Axios.post(
-                        'http://127.0.0.1:8000/accounts/token/',
+                    const response = await axiosInstance.post(
+                        '/accounts/token/',
                         data
                     );
                     
